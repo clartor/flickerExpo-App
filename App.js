@@ -2,19 +2,29 @@ import React from 'react';
 import { Button, View, StyleSheet, Text } from 'react-native';
 
 // import Animated from 'react-native-reanimated';
-import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming, Easing, ReduceMotion } from 'react-native-reanimated';
 
 import Card from './src/filmcard/index'
 import titles from './assets/data/titles';
 
 const App = () => {
   const translateX = useSharedValue(0);
+  const sv = useSharedValue(250);
+
 
   const handlePressRight = () => {
-    translateX.value = withSpring(translateX.value + 300);
+    translateX.value = withTiming(sv.value, {
+      duration: 200,
+      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+      reduceMotion: ReduceMotion.Never,
+    })
   }
   const handlePressLeft = () => {
-    translateX.value = withSpring(translateX.value - 300);
+    translateX.value = withTiming(-sv.value, {
+      duration: 200,
+      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+      reduceMotion: ReduceMotion.Never,
+    })
   }
 
   return (
