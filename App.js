@@ -1,34 +1,34 @@
 import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { Button, View, StyleSheet, Text } from 'react-native';
 
 // import Animated from 'react-native-reanimated';
-import Animated, { useSharedValue } from 'react-native-reanimated';
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 
 import Card from './src/filmcard/index'
 import titles from './assets/data/titles';
-// import { Button } from 'react-native-web';
 
 const App = () => {
-  const width = useSharedValue(100);
+  const translateX = useSharedValue(0);
 
-  const handlePress = () => {
-    width.value = width.value + 20;
+  const handlePressRight = () => {
+    translateX.value = withSpring(translateX.value + 300);
+  }
+  const handlePressLeft = () => {
+    translateX.value = withSpring(translateX.value - 300);
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+    <View style={styles.pageContainer}>
+      <Animated.View style={[styles.box, { transform: [{ translateX }] }]}
+      >
+        {/* <Text>Hello poo </Text> */}
+        <Card title={titles[1]} />
+      </Animated.View>
 
-    {/* <View style={styles.pageContainer}>
-      <Card title={titles[1]}/>
-    </View> */}
-    <Animated.View
-    style={{
-      width, 
-      height: 100,
-      backgroundColor: 'violet',
-    }}
-    />
-    <Button onPress={handlePress} title="click"></Button>
+      <View style={{ flexDirection: 'row' }}>
+        <Button onPress={handlePressLeft} title="No"></Button>
+        <Button onPress={handlePressRight} title="Yes"></Button>
+      </View>
     </View>
   );
 };
@@ -39,7 +39,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
 
-  }
+    // width: '100vw'
+
+  },
+  // myAnimation:
+  // { height: 100,width, backgroundColor: 'green' }
 });
 
 export default App;
