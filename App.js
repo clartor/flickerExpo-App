@@ -4,6 +4,9 @@ import { Button, View, StyleSheet, Text } from 'react-native';
 // import Animated from 'react-native-reanimated';
 import Animated, { useSharedValue, withTiming, Easing, ReduceMotion } from 'react-native-reanimated';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+
 import Card from './src/filmcard/index'
 import titles from './assets/data/titles';
 
@@ -28,18 +31,21 @@ const App = () => {
   }
 
   return (
-    <View style={styles.pageContainer}>
-      <Animated.View style={[styles.box, { transform: [{ translateX }] }]}
-      >
-        {/* <Text>Hello poo </Text> */}
-        <Card title={titles[1]} />
-      </Animated.View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.pageContainer}>
+        <Animated.View style={[styles.box, { transform: [{ translateX }] }]}
+        >
+          {/* <Text>Hello poo </Text> */}
+          <Card title={titles[1]} />
+        </Animated.View>
 
-      <View style={{ flexDirection: 'row' }}>
-        <Button onPress={handlePressLeft} title="No"></Button>
-        <Button onPress={handlePressRight} title="Yes"></Button>
+        <View style={{ flexDirection: 'row' }}>
+          <Button onPress={handlePressLeft} title="No"></Button>
+          <Button onPress={handlePressRight} title="Yes"></Button>
+        </View>
       </View>
-    </View>
+
+    </GestureHandlerRootView>
   );
 };
 
@@ -48,12 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-
-    // width: '100vw'
-
   },
-  // myAnimation:
-  // { height: 100,width, backgroundColor: 'green' }
 });
 
 export default App;
