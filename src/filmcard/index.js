@@ -33,7 +33,7 @@ const Card = (props) => {
 const styles = StyleSheet.create({
     filmcard: {
         width: '95%',
-        height: '70%',
+        height: '85%',
         borderRadius: 10,
         // backgroundColor: 'blue',
         shadowColor: "#00008B",
@@ -65,12 +65,10 @@ const styles = StyleSheet.create({
     },
     year: {
         color: 'white',
-        textColor: 'white',
         fontSize: 15
     },
     director: {
         color: 'white',
-        textColor: 'white',
         fontSize: 20
     }
 });
