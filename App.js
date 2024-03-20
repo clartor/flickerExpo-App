@@ -1,35 +1,81 @@
-import React from 'react';
+import 'react-native-gesture-handler';
+import React, { useState } from 'react';
 import { Button, View, StyleSheet, Text } from 'react-native';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle, withDecay, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
 
-// import Animated from 'react-native-reanimated';
-import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import Card from './src/filmcard/index'
 import titles from './assets/data/titles';
 
+const SIZE = 110;
 const App = () => {
-  const translateX = useSharedValue(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(currentIndex + 1);
+
+  const currentTitle = titles[currentIndex];
+  const nextTitle = titles[nextIndex];
+
+  // animation functions  
+  const offset = useSharedValue(0);
+  const width = useSharedValue(0);
+
+  const onLayout = (event) => {
+    width.value = event.nativeEvent.layout.width;
+  };
+
+  const pan = Gesture.Pan()
+    .onChange((event) => {
+      offset.value += event.changeX;
+    })
+    .onFinalize((event) => {
+      offset.value = withDecay({
+        velocity: event.velocityX,
+        rubberBandEffect: true,
+        clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
+      });
+    })
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateX: offset.value }]
+  }));
+
+  // buttons function
+  const sv = useSharedValue(250);
 
   const handlePressRight = () => {
-    translateX.value = withSpring(translateX.value + 300);
+    offset.value = withTiming(sv.value, {
+      duration: 160,
+      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+      reduceMotion: ReduceMotion.Never,
+    })
   }
   const handlePressLeft = () => {
-    translateX.value = withSpring(translateX.value - 300);
+    offset.value = withTiming(-sv.value, {
+      duration: 160,
+      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+      reduceMotion: ReduceMotion.Never,
+    })
   }
 
   return (
-    <View style={styles.pageContainer}>
-      <Animated.View style={[styles.box, { transform: [{ translateX }] }]}
-      >
-        {/* <Text>Hello poo </Text> */}
-        <Card title={titles[1]} />
-      </Animated.View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View onLayout={onLayout} style={styles.pageContainer}>
+        <Animated.View style={[ styles.nextCardContainer]}>
+          <Card title={nextTitle} />
+        </Animated.View>
 
-      <View style={{ flexDirection: 'row' }}>
-        <Button onPress={handlePressLeft} title="No"></Button>
-        <Button onPress={handlePressRight} title="Yes"></Button>
+        <GestureDetector gesture={pan}>
+            <Animated.View style={[animatedStyles, styles.thisCardContainer]}>
+              <Card title={currentTitle} />
+            </Animated.View>
+        </GestureDetector>
+
+        <View style={{ flexDirection: 'row' }}>
+          <Button onPress={handlePressLeft} title="No"></Button>
+          <Button onPress={handlePressRight} title="Yes"></Button>
+        </View>
       </View>
-    </View>
+    </GestureHandlerRootView>
   );
 };
 
@@ -38,12 +84,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-
-    // width: '100vw'
-
   },
-  // myAnimation:
-  // { height: 100,width, backgroundColor: 'green' }
+  nextCardContainer: {
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    height: '80%',
+  },
+  thisCardContainer: {
+    height: '90%',
+
+  }
 });
 
 export default App;
