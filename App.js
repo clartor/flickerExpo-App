@@ -20,6 +20,8 @@ const App = () => {
   const offset = useSharedValue(0);
   const width = useSharedValue(0);
 
+ 
+
   const onLayout = (event) => {
     width.value = event.nativeEvent.layout.width;
   };
@@ -60,6 +62,8 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View onLayout={onLayout} style={styles.pageContainer}>
+        <View style={styles.cardScrollContainer}>
+
         <Animated.View style={[ styles.nextCardContainer]}>
           <Card title={nextTitle} />
         </Animated.View>
@@ -70,6 +74,7 @@ const App = () => {
             </Animated.View>
         </GestureDetector>
 
+        </View>
         <View style={{ flexDirection: 'row' }}>
           <Button onPress={handlePressLeft} title="No"></Button>
           <Button onPress={handlePressRight} title="Yes"></Button>
@@ -85,14 +90,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+  cardScrollContainer: {
+    height: '80%',
+  },
   nextCardContainer: {
     ...StyleSheet.absoluteFillObject,
     position: 'absolute',
-    height: '80%',
-  },
-  thisCardContainer: {
-    height: '90%',
-
   }
 });
 
