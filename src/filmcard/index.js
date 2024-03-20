@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, ImageBackground } from 'react-native';
 
+
 const Card = (props) => {
     const {name, image, year, director} = props.title;
 
@@ -8,10 +9,7 @@ const Card = (props) => {
         <View style={styles.filmcard}>
             <ImageBackground
                 style={styles.image}
-                source={{ 
-                    uri: image
-                 }}
-            >
+                source={{ uri: image }}>
                 <View style={styles.cardInner}>
                     <Text style={styles.name}>
                         {name}
@@ -24,7 +22,6 @@ const Card = (props) => {
                     </Text>
                 </View>
             </ImageBackground>
-
         </View>
 
     )
@@ -32,10 +29,7 @@ const Card = (props) => {
 
 const styles = StyleSheet.create({
     filmcard: {
-        width: '95%',
-        height: '85%',
         borderRadius: 10,
-        // backgroundColor: 'blue',
         shadowColor: "#00008B",
         shadowOffset: {
             width: 0,
@@ -51,12 +45,10 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 10,
         overflow: 'hidden',
-
         justifyContent: 'flex-end'
     },
     cardInner: {
         padding: 10,
-        // InsetShadow: 5.62,
     },
     name: {
         color: 'white',
