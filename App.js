@@ -11,61 +11,77 @@ import titles from './assets/data/titles';
 // import { rotationHandlerName } from 'react-native-gesture-handler/lib/typescript/handlers/RotationGestureHandler';
 // import { RotationGesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/rotationGesture';
 
+const ROTATION = 40; // hur mycket kortet snurrar
+const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
 
 const App = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState(currentIndex + 1); 
+  const [nextIndex, setNextIndex] = useState(currentIndex + 1);
 
   const currentTitle = titles[currentIndex]; // nuvarande kort
   const nextTitle = titles[nextIndex]; // nästa kort
   // const okeyTitles = {};
 
-  const {width : screenWidth } = useWindowDimensions();
+  const { width: screenWidth } = useWindowDimensions();
+  const hiddenTranslateX = 2 * screenWidth;
 
 
   // animation functions  
   const translateX = useSharedValue(0);
   const rotate = useDerivedValue(
-    () => interpolate(translateX.value, [0, screenWidth], [0, 40]) + 'deg', // rotera beroende på hur långt åt sidan drag
-    );
- 
-  
+    () => interpolate(translateX.value,
+      [0, hiddenTranslateX],
+      [0, ROTATION]) + 'deg', // rotera beroende på hur långt åt sidan drag
+  );
+
+
   const pan = Gesture.Pan()
-  .onBegin(() => {
-  })
-  .onChange((event) => {
-    translateX.value = event.translationX;
-  })
-  .onFinalize(() => {
-    translateX.value = withSpring(0);
-  });
-  
+    .onChange((event) => {
+      translateX.value = event.translationX;
+    })
+    .onEnd((event) => {
+      if (Math.abs(event.velocityX) < SWIPE_VELOCITY) { // om snabbt åt båda håll stanna där
+        translateX.value = withSpring(0);
+        return;
+      }
+      
+    });
+
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [
-      { translateX: translateX.value }, 
-      { rotate: rotate.value}
+      { translateX: translateX.value },
+      { rotate: rotate.value }
     ]
   }));
-  
+
   const serveNewcard = useSharedValue(0.3);
 
   const nextAnimatedStyles = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(serveNewcard.value, { })}],
-   
-  }));
+    transform: [
+      {
+        scale: interpolate(translateX.value,
+          [-hiddenTranslateX, 0, hiddenTranslateX],
+          [1, 0.85, 1])
+      }
+    ],
+    opacity: interpolate(translateX.value,
+      [-hiddenTranslateX, 0, hiddenTranslateX],
+      [1, 0.5, 1])
+  })
+  );
 
   // buttons function
   const sv = useSharedValue('300px');
 
   const handlePressRight = () => {
-    offset.value = withTiming(sv.value, {
+    translateX.value = withTiming(sv.value, {
       duration: 160,
       easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
       reduceMotion: ReduceMotion.Never,
     })
   }
   const handlePressLeft = () => {
-    offset.value = withTiming(-sv.value, {
+    translateX.value = withTiming(-sv.value, {
       duration: 160,
       easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
       reduceMotion: ReduceMotion.Never,
@@ -83,9 +99,9 @@ const App = () => {
           </Animated.View>
 
           <GestureDetector gesture={pan}>
-              <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
-                <Card title={titles[0]} />
-              </Animated.View>
+            <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
+              <Card title={currentTitle} />
+            </Animated.View>
           </GestureDetector>
 
         </View>
@@ -94,7 +110,7 @@ const App = () => {
           <Button onPress={handlePressRight} title="Yes"></Button>
         </View>
         <View>
-                  {/* <Groups okt={okeyTitles}/> */}
+          {/* <Groups okt={okeyTitles}/> */}
         </View>
       </View>
     </GestureHandlerRootView>
