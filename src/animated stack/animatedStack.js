@@ -11,7 +11,7 @@ import titles from './assets/data/titles';
 const ROTATION = 40; // hur mycket kortet snurrar
 const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
 
-const App = () => {
+const animatedStack = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
 
@@ -113,9 +113,6 @@ const App = () => {
         {/* <View style={{ flexDirection: 'row' }}>
           <Button onPress={handlePressLeft} title="No"></Button>
           <Button onPress={handlePressRight} title="Yes"></Button>
-        </View> */}
-        {/* <View>
-          <Groups okt={okeyTitles}/>
         </View> */}
       </View>
     </GestureHandlerRootView>
