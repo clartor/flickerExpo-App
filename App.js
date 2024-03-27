@@ -10,9 +10,9 @@ import AnimatedStack from './src/animatedStack';
 const App = () => {
   return (
       <View style={styles.pageContainer}>
-        <AnimatedStack 
+        <AnimatedStack
         data={titles}
-        renderItem={({item}) => <Card user= {item} /> }
+        renderItem={({item}) => <Card title={item} /> }
         />
       </View>
   );
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  
 });
 
 export default App;

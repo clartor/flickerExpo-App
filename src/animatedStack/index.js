@@ -9,7 +9,7 @@ import Card from '../filmcard';
 const ROTATION = 40; // hur mycket kortet snurrar
 const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
 
-const AnimatedStack =  (props)  => {
+const AnimatedStack = (props) => {
 
   const { data, renderItem } = props;
 
@@ -21,7 +21,7 @@ const AnimatedStack =  (props)  => {
   // const okeyTitles = {};
 
   const { width: screenWidth } = useWindowDimensions();
-  const hiddenTranslateX = 2 * screenWidth; 
+  const hiddenTranslateX = 2 * screenWidth;
 
   // animation functions  
   const translateX = useSharedValue(0);
@@ -98,18 +98,18 @@ const AnimatedStack =  (props)  => {
         <View style={styles.cardScrollContainer}>
           {nextTitle && (
             <Animated.View style={[nextAnimatedStyles, styles.nextCardContainer]}>
-                {/* {renderItem({item: nextTitle})} */}
-                <Card title={nextTitle} />
-              </Animated.View>
-              )}
+              {renderItem({ item: nextTitle })}
+              {/* <Card title={nextTitle} /> */}
+            </Animated.View>
+          )}
 
           <GestureDetector gesture={pan}>
-              {currentTitle && (
-                <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
-              {/* {renderItem({item: currentTitle})} */}
-              <Card title={currentTitle} />
-            </Animated.View>
-              )} 
+            {currentTitle && (
+              <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
+                {renderItem({ item: currentTitle })}
+                {/* <Card title={currentTitle} /> */}
+              </Animated.View>
+            )}
 
           </GestureDetector>
         </View>
