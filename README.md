@@ -9,8 +9,8 @@ Upon project creation, the ".expo" folder is already added to your ".gitignore" 
 
 # Filmflicker 
 
-A movie-picking mobile application swipeable cards enabling users to indicate their preferences by swiping left or right. 
-Adding friends and creating groups where approved titles should go. 
+A movie-picking mobile application, with swipeable cards enabling users to indicate their preferences by swiping left or right on a title. 
+Adding friends and creating groups where collectivly approved titles end up. 
 
 Next movie night is going to be so much easier. 
 
