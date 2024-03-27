@@ -7,12 +7,12 @@ const MatchedTitles = () => {
     <SafeAreaView style={styles.root}>
         <View style={styles.container}>
             <Text>
-                Matched Titles
+                Your saved Titles
             </Text>
             <View style={styles.matched}>
                 {titles.map(title => (
-                    <View style={styles.title} key={title.id}>
-                        <Text> {title.name}</Text>
+                    <View key={title.id}>
+                        <Text style={styles.movieTitle}> {title.name} </Text>
                     </View>
                 ))}
             </View>
@@ -27,15 +27,16 @@ const styles = StyleSheet.create({
         flex: 1
     },
     container: {
+        padding: 20
     },
     matched: {
         width: '200px',
-        height: '200px'
+        // height: '200px',
     },
-    cover: {
-        backgroundColor: 'green',
-        width: '100px',
-        height: '100px'
+    movieTitle: {
+        margin: 10,
+        fontWeight:'400'
+
     }
 })
 
