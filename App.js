@@ -8,11 +8,23 @@ import titles from './assets/data/titles';
 import AnimatedStack from './src/animatedStack';
 
 const App = () => {
+  const onSwipeLeft = (title) => {
+    console.warn("swipe left:", title.name)
+    
+  }
+  const onSwipeRight = (title) => {
+    console.warn("swipe right:", title.name)
+
+  }
+
+
   return (
       <View style={styles.pageContainer}>
         <AnimatedStack
         data={titles}
         renderItem={({item}) => <Card title={item} /> }
+        onSwipeLeft={onSwipeLeft}
+        onSwipeRight={onSwipeRight}
         />
       </View>
   );

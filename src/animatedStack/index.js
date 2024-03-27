@@ -1,17 +1,17 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, useWindowDimensions, Button } from 'react-native';
 import Animated, { runOnJS, useSharedValue, withTiming, useAnimatedStyle, useDerivedValue, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-// import titles from '../../assets/data/titles';
-import Card from '../filmcard';
+import titles from '../../assets/data/titles';
+
 
 const ROTATION = 40; // hur mycket kortet snurrar
 const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
 
 const AnimatedStack = (props) => {
 
-  const { data, renderItem } = props;
+  const { data, renderItem, onSwipeRight, onSwipeLeft } = props;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
@@ -46,6 +46,8 @@ const AnimatedStack = (props) => {
         {}, // tredje delen måste köras innan nästa kort uppdateras 
         () => runOnJS(setCurrentIndex)(currentIndex + 1)
       )
+      const onSwipe = event.velocityX > 0 ? onSwipeRight : onSwipeLeft;
+      runOnJS(onSwipe)(currentTitle);
     });
 
   useEffect(() => {
@@ -74,9 +76,9 @@ const AnimatedStack = (props) => {
   })
   );
 
-  // buttons function Our animated stack 
-  // const sv = useSharedValue('300px');
+  // buttons function Our animated stack
 
+  // const sv = useSharedValue('300px');
   // const handlePressRight = () => {
   //   translateX.value = withTiming(sv.value, {
   //     duration: 160,
@@ -113,10 +115,10 @@ const AnimatedStack = (props) => {
 
           </GestureDetector>
         </View>
-        {/* <View style={{ flexDirection: 'row' }}>
-          <Button onPress={handlePressLeft} title="No"></Button>
-          <Button onPress={handlePressRight} title="Yes"></Button>
-        </View> */}
+        <View style={{ flexDirection: 'row' }}>
+          {/* <Button onPress={handlePressLeft} title="No"></Button>
+          <Button onPress={handlePressRight} title="Yes"></Button> */}
+        </View>
       </View>
     </GestureHandlerRootView>
   );
