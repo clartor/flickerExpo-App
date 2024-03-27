@@ -1,5 +1,5 @@
 # Filmflicker 
-__A work in progress_
+_A work in progress_
 
 A movie-picking mobile application, with swipeable cards enabling users to indicate their preferences by swiping left or right on a title. 
 Adding friends and creating groups where collectivly approved titles end up. 
