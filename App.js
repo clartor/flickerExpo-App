@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, View, StyleSheet, useWindowDimensions } from 'react-native';
-import Animated, { useSharedValue, withTiming, useAnimatedStyle, useDerivedValue, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
+import Animated, { runOnJS, useSharedValue, withTiming, useAnimatedStyle, useDerivedValue, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import Card from './src/filmcard/index'
@@ -44,8 +44,19 @@ const App = () => {
         translateX.value = withSpring(0);
         return;
       }
-      
+      translateX.value = withSpring(
+        hiddenTranslateX * Math.sign(event.velocityX),
+        {}, // tredje delen måste köras innan nästa kort uppdateras 
+        () => runOnJS(setCurrentIndex)(currentIndex + 1)
+      )
+
+
     });
+
+  useEffect(() => {
+    translateX.value = 0;
+    setNextIndex(currentIndex + 1)
+  }, [currentIndex])
 
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [
@@ -53,8 +64,6 @@ const App = () => {
       { rotate: rotate.value }
     ]
   }));
-
-  const serveNewcard = useSharedValue(0.3);
 
   const nextAnimatedStyles = useAnimatedStyle(() => ({
     transform: [
@@ -71,47 +80,48 @@ const App = () => {
   );
 
   // buttons function
-  const sv = useSharedValue('300px');
+  // const sv = useSharedValue('300px');
 
-  const handlePressRight = () => {
-    translateX.value = withTiming(sv.value, {
-      duration: 160,
-      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
-      reduceMotion: ReduceMotion.Never,
-    })
-  }
-  const handlePressLeft = () => {
-    translateX.value = withTiming(-sv.value, {
-      duration: 160,
-      easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
-      reduceMotion: ReduceMotion.Never,
-    })
-  }
+  // const handlePressRight = () => {
+  //   translateX.value = withTiming(sv.value, {
+  //     duration: 160,
+  //     easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+  //     reduceMotion: ReduceMotion.Never,
+  //   })
+  // }
+  // const handlePressLeft = () => {
+  //   translateX.value = withTiming(-sv.value, {
+  //     duration: 160,
+  //     easing: Easing.out(Easing.bezierFn(0.25, 0.1, 0.25, 1)),
+  //     reduceMotion: ReduceMotion.Never,
+  //   })
+  // }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.pageContainer}>
         <View style={styles.cardScrollContainer}>
-
-
-          <Animated.View style={[nextAnimatedStyles, styles.nextCardContainer]}>
-            <Card title={nextTitle} />
-          </Animated.View>
+          {nextTitle && (
+            <Animated.View style={[nextAnimatedStyles, styles.nextCardContainer]}>
+                <Card title={nextTitle} />
+              </Animated.View>
+              )}
 
           <GestureDetector gesture={pan}>
+              {currentTitle && (
             <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
               <Card title={currentTitle} />
             </Animated.View>
+              )} 
           </GestureDetector>
-
         </View>
-        <View style={{ flexDirection: 'row' }}>
+        {/* <View style={{ flexDirection: 'row' }}>
           <Button onPress={handlePressLeft} title="No"></Button>
           <Button onPress={handlePressRight} title="Yes"></Button>
-        </View>
-        <View>
-          {/* <Groups okt={okeyTitles}/> */}
-        </View>
+        </View> */}
+        {/* <View>
+          <Groups okt={okeyTitles}/>
+        </View> */}
       </View>
     </GestureHandlerRootView>
   );
