@@ -3,25 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, { runOnJS, useSharedValue, withTiming, useAnimatedStyle, useDerivedValue, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-
-import Card from './src/filmcard/index'
-
-import titles from './assets/data/titles';
+// import titles from '../../assets/data/titles';
+import Card from '../filmcard';
 
 const ROTATION = 40; // hur mycket kortet snurrar
 const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
 
-const animatedStack = () => {
+const AnimatedStack =  (props)  => {
+
+  const { data, renderItem } = props;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
 
-  const currentTitle = titles[currentIndex]; // nuvarande kort
-  const nextTitle = titles[nextIndex]; // nästa kort
+  const currentTitle = data[currentIndex]; // nuvarande kort
+  const nextTitle = data[nextIndex]; // nästa kort
   // const okeyTitles = {};
 
   const { width: screenWidth } = useWindowDimensions();
-  const hiddenTranslateX = 2 * screenWidth;
-
+  const hiddenTranslateX = 2 * screenWidth; 
 
   // animation functions  
   const translateX = useSharedValue(0);
@@ -74,7 +74,7 @@ const animatedStack = () => {
   })
   );
 
-  // buttons function
+  // buttons function Our animated stack 
   // const sv = useSharedValue('300px');
 
   // const handlePressRight = () => {
@@ -94,20 +94,23 @@ const animatedStack = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.pageContainer}>
+      <View style={styles.root}>
         <View style={styles.cardScrollContainer}>
           {nextTitle && (
             <Animated.View style={[nextAnimatedStyles, styles.nextCardContainer]}>
+                {/* {renderItem({item: nextTitle})} */}
                 <Card title={nextTitle} />
               </Animated.View>
               )}
 
           <GestureDetector gesture={pan}>
               {currentTitle && (
-            <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
+                <Animated.View style={[animatedStyles, styles.currentCardContainer]}>
+              {/* {renderItem({item: currentTitle})} */}
               <Card title={currentTitle} />
             </Animated.View>
               )} 
+
           </GestureDetector>
         </View>
         {/* <View style={{ flexDirection: 'row' }}>
@@ -120,7 +123,7 @@ const animatedStack = () => {
 };
 
 const styles = StyleSheet.create({
-  pageContainer: {
+  root: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
@@ -134,4 +137,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default AnimatedStack;
