@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, useWindowDimensions, Button } from 'react-native';
 import Animated, { runOnJS, useSharedValue, withTiming, useAnimatedStyle, useDerivedValue, ReduceMotion, withSpring, Easing, interpolate } from 'react-native-reanimated';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import titles from '../../assets/data/titles';
-
 
 const ROTATION = 40; // hur mycket kortet snurrar
 const SWIPE_VELOCITY = 300; // hur många pixlar per sekund är ett svep
